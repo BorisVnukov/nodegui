@@ -44,6 +44,7 @@ view.setLayout(new FlexLayout());
 export class QWidget<Signals extends QWidgetSignals = QWidgetSignals> extends YogaWidget<Signals> {
     _rawInlineStyle: string;
     type: string;
+    _layout: QLayout | null;
 
     constructor(arg?: QWidget<QWidgetSignals> | NativeElement) {
         let native: NativeElement;
@@ -65,11 +66,12 @@ export class QWidget<Signals extends QWidgetSignals = QWidgetSignals> extends Yo
     }
 
     layout(): QLayout | null {
-        return wrapperCache.getWrapper(this.native.layout()) as QLayout;
+        return this._layout;
+        // return wrapperCache.getWrapper(this.native.layout()) as QLayout;
     }
     setLayout(layout: QLayout): void {
         this.native.setLayout(layout == null ? null : layout.native);
-
+        this._layout = layout;
         const flexLayout = layout as FlexLayout;
         if (flexLayout?.setFlexNode) {
             //if flex layout set the flexnode
